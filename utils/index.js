@@ -13,7 +13,7 @@ const db = async ({uri, db_name, collection_name, type='find', param={}})=> {
             data = await collection.findOne(param);
             break;
         case 'aggrigation':
-            data = await collection.aggregate(param);
+            data = await collection.aggregate(param).toArray();
             break;
         case 'insert':
             data = await collection.insertOne(param);
@@ -48,6 +48,26 @@ const db = async ({uri, db_name, collection_name, type='find', param={}})=> {
                       }
                     }
                   ]
+            ).toArray();
+            break;
+        case 'last_record':
+            data = await collection.aggregate(
+              [
+                {
+                  $group: {
+                    _id: "$employeeId",
+                    lastrecord: {
+                      $last: {
+                        $dateToString: {
+                          format: "%Y-%m-%d",
+                          date: "$checkInTime"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+              
             ).toArray();
             break;
         default:

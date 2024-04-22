@@ -32,10 +32,64 @@ app.get('/employees/:company_id', async (req, res)=>{
             collection_name: config.db.attendance_prod.collections.employees, 
             db_name: config.db.attendance_prod.name, 
             uri: config.uri, 
-            type:'find',
-            param: {
-               "companyId": companyId + ""
-            }
+            type:'aggrigation',
+            param: [
+                {
+                  $match: {
+                    companyId: companyId + "" 
+                  }
+                },
+                {
+                  $lookup: {
+                    "from": "attendances",
+                    "let": { "id_str": { "$toString": "$_id" } },
+                    "pipeline": [
+                      {
+                        "$match": {
+                          "$expr": {
+                            "$eq": [ "$employeeId", "$$id_str" ]
+                          }
+                        }
+                      }
+                    ],
+                    "as": "attendance"
+                  }
+                },
+                {
+                  $addFields: {
+                    lastAttendance: { $arrayElemAt: ["$attendance.checkInTime", -1] }
+                  }
+                }
+              ]
+        })
+        res.send({ data });
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+app.get('/attendances/', async (req, res)=>{
+    try {
+        const data = await db({
+            collection_name: config.db.attendance_prod.collections.attendances, 
+            db_name: config.db.attendance_prod.name, 
+            uri: config.uri, 
+            type:'aggrigation',
+            param:[
+                {
+                  $group: {
+                    _id: "$employeeId",
+                    lastrecord: {
+                      $last: {
+                        $dateToString: {
+                          format: "%Y-%m-%d",
+                          date: "$checkInTime"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
         })
         res.send({ data });
     } catch (err) {
