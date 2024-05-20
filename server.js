@@ -12,11 +12,77 @@ app.use(express.json())
 
 app.get('/employers', async (req, res)=>{
     try {
+        const companyName = req.params.companyName
         const data = await db({
-            collection_name: config.db.attendance_prod.collections.employers, 
-            db_name: config.db.attendance_prod.name, 
+            collection_name: config.db.ribbons_balloons.collections.employers, 
+            db_name: config.db.ribbons_balloons.name, 
             uri: config.uri,
-            type:'count',
+            type:'find',
+            param: {
+            },
+        })
+        res.send({ data });
+    } catch (err) {
+        console.log(err)
+    }
+})
+app.get('/mvrs', async (req, res)=>{
+    try {
+        const data = await db({
+            collection_name: config.db.ribbons_balloons.collections.mvrs, 
+            db_name: config.db.ribbons_balloons.name, 
+            uri: config.uri,
+            type:'find',
+            param: {
+            },
+        })
+        res.send({ data });
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+app.get('/kocs', async (req, res)=>{
+    try {
+        const data = await db({
+            collection_name: config.db.ribbons_balloons.collections.kocs, 
+            db_name: config.db.ribbons_balloons.name, 
+            uri: config.uri,
+            type:'find',
+            param: {
+            },
+        })
+        res.send({ data });
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+app.get('/hsos', async (req, res)=>{
+    try {
+        const data = await db({
+            collection_name: config.db.ribbons_balloons.collections.hsos, 
+            db_name: config.db.ribbons_balloons.name, 
+            uri: config.uri,
+            type:'find',
+            param: {
+            },
+        })
+        res.send({ data });
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+app.get('/hocs', async (req, res)=>{
+    try {
+        const data = await db({
+            collection_name: config.db.ribbons_balloons.collections.hocs, 
+            db_name: config.db.ribbons_balloons.name, 
+            uri: config.uri,
+            type:'find',
+            param: {
+            },
         })
         res.send({ data });
     } catch (err) {
@@ -29,8 +95,8 @@ app.get('/employees/:company_id', async (req, res)=>{
         // const companyId = new mongo.ObjectId(req.params.company_id)
         const companyId = req.params.company_id
         const data = await db({
-            collection_name: config.db.attendance_prod.collections.employees, 
-            db_name: config.db.attendance_prod.name, 
+            collection_name: config.db.ribbons_balloons.collections.employees, 
+            db_name: config.db.ribbons_balloons.name, 
             uri: config.uri, 
             type:'aggrigation',
             param: [
@@ -71,8 +137,8 @@ app.get('/employees/:company_id', async (req, res)=>{
 app.get('/attendances/', async (req, res)=>{
     try {
         const data = await db({
-            collection_name: config.db.attendance_prod.collections.attendances, 
-            db_name: config.db.attendance_prod.name, 
+            collection_name: config.db.ribbons_balloons.collections.attendances, 
+            db_name: config.db.ribbons_balloons.name, 
             uri: config.uri, 
             type:'aggrigation',
             param:[
