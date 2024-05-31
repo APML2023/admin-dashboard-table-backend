@@ -23,7 +23,8 @@ const config = {
                 "mvrs" : "mvrs",
                 "ownertransferlogs" : "ownertransferlogs", 
             }            
-        }
+        },
+        
     },
     uri: 'mongodb+srv://data_IT:data_IT@apml.6w5pyjg.mongodb.net'
 }

@@ -90,6 +90,22 @@ app.get('/hocs', async (req, res)=>{
     }
 })
 
+app.get('/issues', async (req, res)=>{
+    try {
+        const data = await db({
+            collection_name: config.db.ribbons_balloons.collections.issues, 
+            db_name: config.db.ribbons_balloons.name, 
+            uri: config.uri,
+            type:'find',
+            param: {
+            },
+        })
+        res.send({ data });
+    } catch (err) {
+        console.log(err)
+    }
+})
+
 app.get('/employees/:company_id', async (req, res)=>{
     try {
         // const companyId = new mongo.ObjectId(req.params.company_id)
